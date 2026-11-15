@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a3d91">
+<title>Absensi BPS</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0a3d91;--blue:#1d6fe8;--cyan:#22c1dc;--gold:#f5b942;--bg:#eef3fb;--ink:#14213d;
+--ok:#16a34a;--izin:#f59e0b;--sakit:#ef4444}
+*{font-family:'Plus Jakarta Sans',system-ui,sans-serif}
+body{background:var(--bg);color:var(--ink);padding-bottom:env(safe-area-inset-bottom)}
+.hero{background:linear-gradient(135deg,#071f55 0%,var(--navy) 45%,var(--blue) 100%);color:#fff;
+padding:calc(2.2rem + env(safe-area-inset-top)) 1.25rem 5.5rem;position:relative;overflow:hidden;border-radius:0 0 36px 36px}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.08)}
+.hero:before{width:240px;height:240px;top:-80px;right:-70px}
+.hero:after{width:160px;height:160px;bottom:-60px;left:-40px;background:rgba(245,185,66,.18)}
+.badge-bps{background:rgba(255,255,255,.16);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.3);
+padding:.4rem .9rem;border-radius:50px;font-size:.78rem;font-weight:600;display:inline-flex;gap:.4rem;align-items:center}
+.hero h1{font-weight:800;font-size:2rem;margin:1rem 0 .5rem;line-height:1.15}
+.hero h1 span{color:var(--gold)}
+.hero p{opacity:.88;font-size:.92rem;max-width:520px;margin:0}
+.clock{margin-top:1.1rem;font-weight:700;font-size:.9rem;opacity:.95}
+.wrap{max-width:760px;margin:-3.4rem auto 0;padding:0 1rem;position:relative;z-index:2}
+.card-x{background:#fff;border:0;border-radius:24px;box-shadow:0 18px 40px -18px rgba(10,61,145,.35);padding:1.4rem;margin-bottom:1.3rem}
+.sec-title{font-weight:800;font-size:1.1rem;display:flex;align-items:center;gap:.6rem;margin-bottom:1.1rem}
+.sec-title i{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--cyan));color:#fff;display:grid;place-items:center}
+.form-label{font-weight:700;font-size:.8rem;color:#475569;margin-bottom:.35rem}
+.form-control,.form-select{border-radius:14px;border:2px solid #e3eaf6;padding:.75rem .95rem;background-color:#f8fafd;font-weight:600}
+.form-control:focus,.form-select:focus{border-color:var(--blue);box-shadow:0 0 0 .25rem rgba(29,111,232,.15);background:#fff}
+.ket-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem}
+.ket-grid input{display:none}
+.ket-grid label{border:2px solid #e3eaf6;border-radius:16px;padding:.8rem .3rem;text-align:center;font-weight:700;font-size:.85rem;
+cursor:pointer;transition:.2s;background:#f8fafd;display:block}
+.ket-grid label i{display:block;font-size:1.4rem;margin-bottom:.15rem}
+#k1:checked+label{border-color:var(--ok);background:#e8f8ee;color:var(--ok)}
+#k2:checked+label{border-color:var(--izin);background:#fff6e0;color:#b45309}
+#k3:checked+label{border-color:var(--sakit);background:#fdeaea;color:var(--sakit)}
+.btn-main{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;border:0;border-radius:16px;padding:.95rem;
+font-weight:800;width:100%;box-shadow:0 12px 24px -10px rgba(29,111,232,.7);transition:.2s}
+.btn-main:active{transform:scale(.98)}
+.btn-main:disabled{opacity:.7}
+.stat{border-radius:18px;padding:.9rem .6rem;text-align:center;color:#fff}
+.stat b{font-size:1.6rem;display:block;font-weight:800;line-height:1.1}
+.stat small{font-weight:600;opacity:.92;font-size:.72rem}
+.s0{background:linear-gradient(135deg,#0a3d91,#1d6fe8)}.s1{background:linear-gradient(135deg,#15803d,#22c55e)}
+.s2{background:linear-gradient(135deg,#d97706,#fbbf24)}.s3{background:linear-gradient(135deg,#dc2626,#f87171)}
+.chart-box{position:relative;height:250px}
+.btn-ref{border:0;background:#eef3fb;color:var(--blue);border-radius:12px;font-weight:700;padding:.4rem .8rem;font-size:.8rem}
+.toast-x{position:fixed;left:50%;bottom:calc(1.2rem + env(safe-area-inset-bottom));transform:translate(-50%,120px);
+background:#14213d;color:#fff;padding:.85rem 1.2rem;border-radius:16px;font-weight:600;font-size:.9rem;z-index:99;
+transition:.35s;max-width:90%;box-shadow:0 12px 30px rgba(0,0,0,.3)}
+.toast-x.show{transform:translate(-50%,0)}
+footer{text-align:center;font-size:.75rem;color:#64748b;padding:.5rem 0 1.5rem}
+</style>
+</head>
+<body>
+
+<!-- SECTION 1 : HEADLINE & DEFINISI -->
+<header class="hero">
+  <div class="wrap" style="margin:0 auto;padding:0;position:relative">
+    <span class="badge-bps"><i class="bi bi-patch-check-fill"></i> BPS Karya Peduli RW-09</span>
+    <h1>Absensi <span>BPS</span><br>Digital</h1>
+    <p><b>Absensi BPS</b> adalah sistem pencatatan kehadiran pegawai dan anggota tim secara digital, cepat, dan akurat.
+      Data tersimpan otomatis di Google Spreadsheet dan tampil real-time dalam dashboard.</p>
+    <div class="clock"><i class="bi bi-clock-history"></i> <span id="clock">--</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- SECTION 2 : FORM -->
+  <section class="card-x">
+    <div class="sec-title"><i class="bi bi-pencil-square"></i> Form Absensi</div>
+    <form id="f" novalidate>
+      <div class="mb-3">
+        <label class="form-label">TANGGAL</label>
+        <input type="date" id="tgl" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">NAMA</label>
+        <select id="nama" class="form-select" required><option value="">Memuat data...</option></select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">JABATAN</label>
+        <select id="jab" class="form-select" required>
+          <option value="">Pilih jabatan</option><option>Ketua</option><option>Anggota</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">ALAMAT</label>
+        <select id="alamat" class="form-select" required><option value="">Memuat data...</option></select>
+      </div>
+      <div class="mb-4">
+        <label class="form-label">KETERANGAN</label>
+        <div class="ket-grid">
+          <div><input type="radio" name="ket" id="k1" value="Hadir"><label for="k1"><i class="bi bi-check-circle-fill"></i>Hadir</label></div>
+          <div><input type="radio" name="ket" id="k2" value="Izin"><label for="k2"><i class="bi bi-envelope-paper-fill"></i>Izin</label></div>
+          <div><input type="radio" name="ket" id="k3" value="Sakit"><label for="k3"><i class="bi bi-bandaid-fill"></i>Sakit</label></div>
+        </div>
+      </div>
+      <button class="btn-main" id="btn" type="submit"><i class="bi bi-send-fill me-1"></i> Kirim Absensi</button>
+    </form>
+  </section>
+
+  <!-- SECTION 3 : DASHBOARD -->
+  <section class="card-x">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="sec-title mb-0"><i class="bi bi-bar-chart-fill"></i> Dashboard</div>
+      <button class="btn-ref" id="ref"><i class="bi bi-arrow-repeat"></i> Segarkan</button>
+    </div>
+    <div class="row g-2 mb-4">
+      <div class="col-3"><div class="stat s0"><b id="tT">0</b><small>Total</small></div></div>
+      <div class="col-3"><div class="stat s1"><b id="tH">0</b><small>Hadir</small></div></div>
+      <div class="col-3"><div class="stat s2"><b id="tI">0</b><small>Izin</small></div></div>
+      <div class="col-3"><div class="stat s3"><b id="tS">0</b><small>Sakit</small></div></div>
+    </div>
+    <h6 class="fw-bold mb-2">Komposisi Keterangan</h6>
+    <div class="chart-box mb-4"><canvas id="c1"></canvas></div>
+    <h6 class="fw-bold mb-2">Absensi per Nama</h6>
+    <div class="chart-box" id="box2"><canvas id="c2"></canvas></div>
+  </section>
+  <footer>© <span id="yr"></span> Absensi BPS · Premium Edition</footer>
+</main>
+<div class="toast-x" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+/* ====== GANTI dengan URL Web App hasil deploy Code.gs ====== */
+const API = "https://script.google.com/macros/s/AKfycbwwg28MQyetyEFIC2EXFGtHFfb_RvLWaCNNAUYHhFIlj6dbROEWn8HFlqOxS1TVZQWj/exec"; // contoh: https://script.google.com/macros/s/AKfy.../exec
+/* ========================================================== */
+
+const $ = id => document.getElementById(id);
+const demo = API.startsWith("PASTE");
+let c1, c2;
+
+function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),3200)}
+function fill(sel, arr, ph){$(sel).innerHTML=`<option value="">${ph}</option>`+arr.map(v=>`<option>${v}</option>`).join("")}
+
+// Jam & tanggal
+function tick(){$("clock").textContent=new Date().toLocaleString("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric",hour:"2-digit",minute:"2-digit"})}
+tick();setInterval(tick,30000);
+$("yr").textContent=new Date().getFullYear();
+const d=new Date();$("tgl").value=new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+
+// GET (CORS aman: GAS mengembalikan header Access-Control-Allow-Origin:*)
+async function get(action){
+  if(demo) return action==="init"
+    ? {nama:["Contoh Nama 1","Contoh Nama 2"],alamat:["Jakarta","Bandung"]}
+    : {data:[{nama:"Contoh Nama 1",keterangan:"Hadir"},{nama:"Contoh Nama 2",keterangan:"Izin"},{nama:"Contoh Nama 1",keterangan:"Sakit"}]};
+  const r = await fetch(`${API}?action=${action}&_=${Date.now()}`);
+  return r.json();
+}
+
+async function init(){
+  try{
+    const r = await get("init");
+    if(r.ok===false) throw new Error(r.error);
+    const nm=r.nama||[], al=r.alamat||[];
+    fill("nama",nm,nm.length?"Pilih nama":"⚠️ Data sheet 'nama' kosong");
+    fill("alamat",al,al.length?"Pilih alamat":"⚠️ Data sheet 'alamat' kosong");
+    if(!al.length) console.warn("Sheet tersedia:",r.sheets);
+  }catch(e){
+    fill("nama",[],"⚠️ Gagal memuat — cek URL Web App");
+    fill("alamat",[],"⚠️ Gagal memuat — cek URL Web App");
+    console.error(e);toast("Gagal memuat data: "+e.message);
+  }
+}
+
+// Dashboard
+const COL={Hadir:"#22c55e",Izin:"#fbbf24",Sakit:"#f87171"};
+async function dash(){
+  try{
+    const r = await get("stats"), data = r.data||[];
+    const cnt = k=>data.filter(x=>x.keterangan===k).length;
+    $("tT").textContent=data.length;$("tH").textContent=cnt("Hadir");$("tI").textContent=cnt("Izin");$("tS").textContent=cnt("Sakit");
+
+    c1&&c1.destroy();
+    c1=new Chart($("c1"),{type:"doughnut",
+      data:{labels:["Hadir","Izin","Sakit"],datasets:[{data:[cnt("Hadir"),cnt("Izin"),cnt("Sakit")],backgroundColor:Object.values(COL),borderWidth:4,borderColor:"#fff"}]},
+      options:{maintainAspectRatio:false,cutout:"65%",plugins:{legend:{position:"bottom",labels:{usePointStyle:true,font:{weight:"700"}}}}}});
+
+    const names=[...new Set(data.map(x=>x.nama))];
+    $("box2").style.height=Math.max(250,names.length*38+70)+"px";
+    c2&&c2.destroy();
+    c2=new Chart($("c2"),{type:"bar",
+      data:{labels:names,datasets:["Hadir","Izin","Sakit"].map(k=>({label:k,backgroundColor:COL[k],borderRadius:6,
+        data:names.map(n=>data.filter(x=>x.nama===n&&x.keterangan===k).length)}))},
+      options:{indexAxis:"y",maintainAspectRatio:false,
+        scales:{x:{stacked:true,ticks:{precision:0},grid:{display:false}},y:{stacked:true,grid:{display:false}}},
+        plugins:{legend:{position:"bottom",labels:{usePointStyle:true,font:{weight:"700"}}}}}});
+  }catch(e){toast("Gagal memuat dashboard")}
+}
+
+// Submit — text/plain = "simple request", tanpa preflight → anti CORS
+$("f").addEventListener("submit",async ev=>{
+  ev.preventDefault();
+  const ket=document.querySelector('input[name=ket]:checked');
+  const p={tanggal:$("tgl").value,nama:$("nama").value,jabatan:$("jab").value,alamat:$("alamat").value,keterangan:ket?ket.value:""};
+  if(Object.values(p).some(v=>!v)) return toast("⚠️ Lengkapi semua isian dulu ya");
+  const b=$("btn");b.disabled=true;b.innerHTML='<span class="spinner-border spinner-border-sm me-2"></span>Mengirim...';
+  try{
+    if(!demo){
+      const r=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(p)});
+      const j=await r.json(); if(!j.ok) throw new Error(j.error);
+    }
+    toast("✅ Absensi berhasil dikirim!");
+    $("f").reset();$("tgl").value=p.tanggal;
+    dash();
+  }catch(e){toast("❌ Gagal kirim: "+e.message)}
+  b.disabled=false;b.innerHTML='<i class="bi bi-send-fill me-1"></i> Kirim Absensi';
+});
+$("ref").onclick=dash;
+init();dash();
+</script>
+</body>
+</html>
