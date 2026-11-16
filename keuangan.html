@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b3b5c">
+<title>Laporan Keuangan BPS</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--deep:#0b3b5c;--teal:#0f766e;--mint:#34d399;--gold:#f5b942;--bg:#edf5f4;--ink:#14213d;
+--in:#16a34a;--out:#e11d48}
+*{font-family:'Plus Jakarta Sans',system-ui,sans-serif}
+body{background:var(--bg);color:var(--ink);padding-bottom:env(safe-area-inset-bottom)}
+.hero{background:linear-gradient(135deg,#071f3a 0%,var(--deep) 45%,var(--teal) 100%);color:#fff;
+padding:calc(2.2rem + env(safe-area-inset-top)) 1.25rem 5.5rem;position:relative;overflow:hidden;border-radius:0 0 36px 36px}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.08)}
+.hero:before{width:240px;height:240px;top:-80px;right:-70px}
+.hero:after{width:160px;height:160px;bottom:-60px;left:-40px;background:rgba(245,185,66,.18)}
+.hero h1{font-weight:800;font-size:2rem;margin:1rem 0 .5rem;line-height:1.15}
+.hero h1 span{color:var(--gold)}
+.hero p{opacity:.88;font-size:.92rem;max-width:520px;margin:0}
+.badge-bps{background:rgba(255,255,255,.16);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.3);
+padding:.4rem .9rem;border-radius:50px;font-size:.78rem;font-weight:600;display:inline-flex;gap:.4rem;align-items:center}
+.back{display:inline-flex;align-items:center;gap:.35rem;color:#fff;text-decoration:none;font-weight:700;font-size:.82rem;opacity:.9;margin-bottom:.9rem}
+.back:hover{color:var(--gold)}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem}
+.btn-out{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:50px;
+padding:.35rem .9rem;font-weight:700;font-size:.78rem;display:inline-flex;gap:.4rem;align-items:center}
+.btn-out:hover{background:rgba(255,255,255,.28);color:#fff}
+.wrap{max-width:760px;margin:-3.4rem auto 0;padding:0 1rem;position:relative;z-index:2}
+.hero .wrap{margin:0 auto;padding:0;z-index:1}
+.card-x{background:#fff;border:0;border-radius:24px;box-shadow:0 18px 40px -18px rgba(11,59,92,.4);padding:1.4rem;margin-bottom:1.3rem}
+.sec-title{font-weight:800;font-size:1.1rem;display:flex;align-items:center;gap:.6rem;margin-bottom:1.1rem}
+.sec-title i{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--teal),var(--mint));color:#fff;display:grid;place-items:center}
+.form-label{font-weight:700;font-size:.8rem;color:#475569;margin-bottom:.35rem}
+.form-control,.form-select,.input-group-text{border-radius:14px;border:2px solid #dbe9e7;padding:.75rem .95rem;background-color:#f6fbfa;font-weight:600}
+.input-group>.form-control{border-radius:0 14px 14px 0}
+.input-group>.input-group-text{border-radius:14px 0 0 14px;border-right:0;color:#0f766e;font-weight:800}
+.form-control:focus,.form-select:focus{border-color:var(--teal);box-shadow:0 0 0 .25rem rgba(15,118,110,.15);background:#fff}
+
+/* login */
+#login{min-height:100vh;display:grid;place-items:center;padding:1.2rem;
+background:linear-gradient(135deg,#071f3a 0%,var(--deep) 45%,var(--teal) 100%);position:relative;overflow:hidden}
+#login:before{content:"";position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,.07);top:-100px;right:-80px}
+#login:after{content:"";position:absolute;width:200px;height:200px;border-radius:50%;background:rgba(245,185,66,.16);bottom:-70px;left:-50px}
+.login-card{background:#fff;border-radius:28px;padding:1.8rem 1.5rem;width:100%;max-width:400px;position:relative;z-index:1;
+box-shadow:0 30px 60px -20px rgba(0,0,0,.5)}
+.lock-ico{width:64px;height:64px;border-radius:20px;background:linear-gradient(135deg,var(--teal),var(--mint));color:#fff;display:grid;place-items:center;font-size:1.8rem;margin:0 auto 1rem}
+.btn-main{background:linear-gradient(135deg,var(--deep),var(--teal));color:#fff;border:0;border-radius:16px;padding:.95rem;
+font-weight:800;width:100%;box-shadow:0 12px 24px -10px rgba(15,118,110,.7);transition:.2s}
+.btn-main:active{transform:scale(.98)}
+.btn-main:disabled{opacity:.7}
+.err{color:var(--out);font-weight:700;font-size:.82rem;min-height:1.2rem}
+
+/* jenis transaksi */
+.tipe-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.tipe-grid input{display:none}
+.tipe-grid label{border:2px solid #dbe9e7;border-radius:16px;padding:.85rem .3rem;text-align:center;font-weight:700;font-size:.9rem;
+cursor:pointer;transition:.2s;background:#f6fbfa;display:block}
+.tipe-grid label i{display:block;font-size:1.5rem;margin-bottom:.15rem}
+#t1:checked+label{border-color:var(--in);background:#e8f8ee;color:var(--in)}
+#t2:checked+label{border-color:var(--out);background:#fff0f3;color:var(--out)}
+
+/* item */
+.item{background:#f6fbfa;border:2px solid #dbe9e7;border-radius:18px;padding:.8rem;margin-bottom:.7rem}
+.item .row{--bs-gutter-x:.5rem}
+.item .form-control,.item .input-group-text{background:#fff;padding:.6rem .8rem}
+.btn-del{border:0;background:#fff0f3;color:var(--out);border-radius:12px;width:100%;height:100%;min-height:42px;font-size:1.05rem}
+.btn-add{width:100%;border:2px dashed var(--teal);background:#effaf8;color:var(--teal);border-radius:16px;padding:.7rem;font-weight:800}
+.btn-add:hover{background:#e0f5f1}
+.total-bar{display:flex;justify-content:space-between;align-items:center;border-radius:16px;padding:.8rem 1rem;font-weight:800;margin:1rem 0}
+.total-bar.in{background:#e8f8ee;color:var(--in)}.total-bar.out{background:#fff0f3;color:var(--out)}
+.total-bar b{font-size:1.15rem}
+
+/* dashboard */
+.stat{border-radius:18px;padding:.9rem .7rem;text-align:center;color:#fff;height:100%}
+.stat b{font-size:1.02rem;display:block;font-weight:800;line-height:1.25;word-break:break-word}
+.stat small{font-weight:600;opacity:.92;font-size:.72rem}
+.sIn{background:linear-gradient(135deg,#15803d,#22c55e)}.sOut{background:linear-gradient(135deg,#be123c,#fb7185)}
+.sSaldo{background:linear-gradient(135deg,var(--deep),var(--teal))}
+.chart-box{position:relative;height:250px}
+.btn-ref{border:0;background:#edf5f4;color:var(--teal);border-radius:12px;font-weight:700;padding:.4rem .8rem;font-size:.8rem}
+.mini-title{font-weight:800;font-size:.95rem;display:flex;align-items:center;gap:.4rem;margin-bottom:.6rem}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+
+/* riwayat */
+.tabs{display:flex;gap:.4rem;margin-bottom:.8rem;flex-wrap:wrap}
+.tabs button{border:2px solid #dbe9e7;background:#f6fbfa;border-radius:50px;padding:.3rem .9rem;font-weight:700;font-size:.8rem;color:#475569}
+.tabs button.on{background:var(--deep);border-color:var(--deep);color:#fff}
+.trx{display:flex;align-items:center;gap:.8rem;padding:.7rem 0;border-bottom:1px solid #e5eeed}
+.trx:last-child{border:0}
+.trx .ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:none;font-size:1.1rem}
+.trx .ic.in{background:#e8f8ee;color:var(--in)}.trx .ic.out{background:#fff0f3;color:var(--out)}
+.trx .nm{font-weight:700;font-size:.9rem;line-height:1.25;word-break:break-word}
+.trx .dt{font-size:.74rem;color:#64748b}
+.trx .am{margin-left:auto;font-weight:800;font-size:.9rem;white-space:nowrap}
+.trx .am.in{color:var(--in)}.trx .am.out{color:var(--out)}
+.empty{text-align:center;color:#64748b;font-size:.88rem;padding:1.2rem 0}
+
+.toast-x{position:fixed;left:50%;bottom:calc(1.2rem + env(safe-area-inset-bottom));transform:translate(-50%,120px);
+background:#14213d;color:#fff;padding:.85rem 1.2rem;border-radius:16px;font-weight:600;font-size:.9rem;z-index:99;
+transition:.35s;max-width:90%;box-shadow:0 12px 30px rgba(0,0,0,.3)}
+.toast-x.show{transform:translate(-50%,0)}
+footer{text-align:center;font-size:.75rem;color:#64748b;padding:.5rem 0 1.5rem}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<section id="login">
+  <form class="login-card" id="fLogin" autocomplete="on" novalidate>
+    <div class="lock-ico"><i class="bi bi-shield-lock-fill"></i></div>
+    <h4 class="fw-bold text-center mb-1">Laporan Keuangan</h4>
+    <p class="text-center text-secondary small mb-4">Silakan login untuk melanjutkan</p>
+    <div class="mb-3">
+      <label class="form-label" for="u">USERNAME</label>
+      <input class="form-control" id="u" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+    </div>
+    <div class="mb-2">
+      <label class="form-label" for="p">PASSWORD</label>
+      <div class="input-group">
+        <input class="form-control" type="password" id="p" autocomplete="current-password" required style="border-radius:14px 0 0 14px">
+        <button class="input-group-text" type="button" id="eye" aria-label="Tampilkan password" style="border-left:0;border-radius:0 14px 14px 0;cursor:pointer"><i class="bi bi-eye"></i></button>
+      </div>
+    </div>
+    <div class="err mb-2" id="loginErr" role="alert"></div>
+    <button class="btn-main" id="btnLogin" type="submit"><i class="bi bi-box-arrow-in-right me-1"></i> Masuk</button>
+    <div class="text-center mt-3"><a href="index.html" class="small fw-bold text-decoration-none" style="color:var(--teal)"><i class="bi bi-arrow-left"></i> Kembali ke Beranda</a></div>
+  </form>
+</section>
+
+<!-- ============ APLIKASI ============ -->
+<div id="app" hidden>
+  <header class="hero">
+    <div class="wrap">
+      <div class="hero-top">
+        <a class="back" href="index.html"><i class="bi bi-arrow-left"></i> Beranda</a>
+        <button class="btn-out" id="logout"><i class="bi bi-box-arrow-right"></i> Keluar</button>
+      </div>
+      <span class="badge-bps"><i class="bi bi-patch-check-fill"></i> BPS Karya Peduli RW-09</span>
+      <h1>Laporan <span>Keuangan</span></h1>
+      <p>Catat pemasukan dan pengeluaran BPS. Data tersimpan otomatis di Google Spreadsheet (sheet “Keuangan”).</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- FORM INPUT -->
+    <section class="card-x">
+      <div class="sec-title"><i class="bi bi-journal-plus"></i> Input Transaksi</div>
+      <form id="f" novalidate>
+        <div class="mb-3">
+          <label class="form-label" for="tgl">TANGGAL INPUT</label>
+          <input type="date" id="tgl" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">TRANSAKSI</label>
+          <div class="tipe-grid">
+            <div><input type="radio" name="tipe" id="t1" value="Pemasukan"><label for="t1"><i class="bi bi-arrow-down-circle-fill"></i>Pemasukan</label></div>
+            <div><input type="radio" name="tipe" id="t2" value="Pengeluaran"><label for="t2"><i class="bi bi-arrow-up-circle-fill"></i>Pengeluaran</label></div>
+          </div>
+        </div>
+
+        <div id="itemsBox" hidden>
+          <label class="form-label" id="itemsLabel">ITEM</label>
+          <div id="items"></div>
+          <button type="button" class="btn-add" id="addItem"><i class="bi bi-plus-circle-fill me-1"></i> Tambah item</button>
+          <div class="total-bar in" id="totalBar"><span id="totalLbl">Total</span><b id="total">Rp 0</b></div>
+          <button class="btn-main" id="btn" type="submit"><i class="bi bi-save-fill me-1"></i> Simpan Transaksi</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section class="card-x">
+      <div class="d-flex justify-content-between align-items-center mb-3 gap-2 flex-wrap">
+        <div class="sec-title mb-0"><i class="bi bi-bar-chart-fill"></i> Dashboard Keuangan</div>
+        <div class="d-flex gap-2">
+          <select id="bulan" class="form-select form-select-sm" style="border-radius:12px;padding:.35rem .7rem;width:auto"></select>
+          <button class="btn-ref" id="ref"><i class="bi bi-arrow-repeat"></i> Segarkan</button>
+        </div>
+      </div>
+
+      <div class="row g-2 mb-4">
+        <div class="col-12 col-sm-4"><div class="stat sIn"><small>Total Pemasukan</small><b id="sIn">Rp 0</b></div></div>
+        <div class="col-12 col-sm-4"><div class="stat sOut"><small>Total Pengeluaran</small><b id="sOut">Rp 0</b></div></div>
+        <div class="col-12 col-sm-4"><div class="stat sSaldo"><small>Saldo</small><b id="sSaldo">Rp 0</b></div></div>
+      </div>
+
+      <h6 class="fw-bold mb-2">Pemasukan vs Pengeluaran per Bulan</h6>
+      <div class="chart-box mb-4"><canvas id="cBulan"></canvas></div>
+
+      <div class="mini-title"><span class="dot" style="background:var(--in)"></span> Pemasukan per item</div>
+      <div class="chart-box mb-4"><canvas id="cIn"></canvas></div>
+
+      <div class="mini-title"><span class="dot" style="background:var(--out)"></span> Pengeluaran per item</div>
+      <div class="chart-box"><canvas id="cOut"></canvas></div>
+    </section>
+
+    <!-- RIWAYAT -->
+    <section class="card-x">
+      <div class="sec-title"><i class="bi bi-clock-history"></i> Riwayat Transaksi</div>
+      <div class="tabs" id="tabs">
+        <button class="on" data-f="all">Semua</button>
+        <button data-f="Pemasukan">Pemasukan</button>
+        <button data-f="Pengeluaran">Pengeluaran</button>
+      </div>
+      <div id="riwayat"></div>
+      <button class="btn-ref w-100 mt-2" id="more" hidden>Tampilkan lebih banyak</button>
+    </section>
+
+    <footer>© <span id="yr"></span> Laporan Keuangan BPS</footer>
+  </main>
+</div>
+<div class="toast-x" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+/* URL Web App yang sama dengan absensi */
+const API = "https://script.google.com/macros/s/AKfycbzjdCYUk5JySfHmF41P4WqzuMIOJ3fVjMwvICzcZr5wAf-4ER-BjoaXQCmk_AT6ZSs/exec";
+
+const $ = id => document.getElementById(id);
+const TK = "bps_keu_token";
+let ALL = [], tipe = "", cBulan, cIn, cOut, tabF = "all", shown = 15;
+
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const rp = n => (n < 0 ? "-Rp " : "Rp ") + Math.abs(n).toLocaleString("id-ID");
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),3200)}
+function today(){const d=new Date();return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)}
+$("yr").textContent = new Date().getFullYear();
+
+/* ---------- API (POST text/plain = tanpa preflight CORS) ---------- */
+async function call(action, extra={}){
+  const r = await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+    body:JSON.stringify({action, token:sessionStorage.getItem(TK)||"", ...extra})});
+  const j = await r.json();
+  if(j.auth===false){ logout("Sesi berakhir, silakan login lagi"); throw new Error(j.error); }
+  return j;
+}
+
+/* ---------- Login / Logout ---------- */
+function showApp(){ $("login").hidden=true; $("app").hidden=false; resetForm(); loadData(); }
+function logout(msg){
+  sessionStorage.removeItem(TK);
+  $("app").hidden=true; $("login").hidden=false;
+  $("p").value=""; $("loginErr").textContent = msg||"";
+}
+$("logout").onclick = ()=>logout();
+$("eye").onclick = ()=>{const p=$("p");const s=p.type==="password";p.type=s?"text":"password";$("eye").innerHTML=`<i class="bi bi-eye${s?"-slash":""}"></i>`};
+
+$("fLogin").addEventListener("submit", async ev=>{
+  ev.preventDefault();
+  const user=$("u").value.trim(), pass=$("p").value;
+  if(!user||!pass){$("loginErr").textContent="Username dan password wajib diisi";return}
+  const b=$("btnLogin"); b.disabled=true; b.innerHTML='<span class="spinner-border spinner-border-sm me-2"></span>Memeriksa...';
+  $("loginErr").textContent="";
+  try{
+    const r = await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"login",user,pass})});
+    const j = await r.json();
+    if(!j.ok) throw new Error(j.error);
+    sessionStorage.setItem(TK,j.token);
+    showApp();
+  }catch(e){ $("loginErr").textContent = e.message || "Gagal login"; }
+  b.disabled=false; b.innerHTML='<i class="bi bi-box-arrow-in-right me-1"></i> Masuk';
+});
+
+/* ---------- Form input ---------- */
+function digits(s){return String(s).replace(/\D/g,"")}
+function addItem(nama="", jumlah=""){
+  const d=document.createElement("div"); d.className="item";
+  d.innerHTML=`<div class="row align-items-stretch">
+    <div class="col-12 mb-2"><input class="form-control i-nama" placeholder="Nama transaksi" maxlength="120"></div>
+    <div class="col"><div class="input-group"><span class="input-group-text">Rp</span>
+      <input class="form-control i-jml" inputmode="numeric" placeholder="0" autocomplete="off"></div></div>
+    <div class="col-auto" style="width:52px"><button type="button" class="btn-del" aria-label="Hapus item"><i class="bi bi-trash3-fill"></i></button></div>
+  </div>`;
+  const nm=d.querySelector(".i-nama"), jm=d.querySelector(".i-jml");
+  nm.value=nama; jm.value=jumlah?Number(jumlah).toLocaleString("id-ID"):"";
+  jm.addEventListener("input",()=>{const v=digits(jm.value);jm.value=v?Number(v).toLocaleString("id-ID"):"";calcTotal()});
+  d.querySelector(".btn-del").onclick=()=>{d.remove();syncDel();calcTotal()};
+  $("items").appendChild(d); syncDel(); calcTotal();
+  return nm;
+}
+function syncDel(){const its=$("items").children;[...its].forEach(i=>i.querySelector(".btn-del").parentElement.hidden=its.length<2)}
+function getItems(){return [...$("items").children].map(i=>({nama:i.querySelector(".i-nama").value.trim(),jumlah:Number(digits(i.querySelector(".i-jml").value))}))}
+function calcTotal(){$("total").textContent=rp(getItems().reduce((a,x)=>a+x.jumlah,0))}
+function setTipe(t){
+  tipe=t; $("itemsBox").hidden=false;
+  const masuk=t==="Pemasukan";
+  $("itemsLabel").textContent = masuk?"ITEM PEMASUKAN":"ITEM PENGELUARAN";
+  $("totalBar").className="total-bar "+(masuk?"in":"out");
+  $("totalLbl").textContent = masuk?"Total Pemasukan":"Total Pengeluaran";
+  if(!$("items").children.length) addItem();
+}
+document.querySelectorAll("input[name=tipe]").forEach(r=>r.addEventListener("change",()=>setTipe(r.value)));
+$("addItem").onclick=()=>addItem().focus();
+function resetForm(){
+  $("tgl").value=today(); tipe=""; $("items").innerHTML=""; $("itemsBox").hidden=true;
+  document.querySelectorAll("input[name=tipe]").forEach(r=>r.checked=false); calcTotal();
+}
+
+$("f").addEventListener("submit", async ev=>{
+  ev.preventDefault();
+  const tanggal=$("tgl").value;
+  if(!tanggal) return toast("⚠️ Pilih tanggal dulu");
+  if(!tipe) return toast("⚠️ Pilih Pemasukan atau Pengeluaran");
+  const raw=getItems().filter(x=>x.nama||x.jumlah);           // abaikan baris kosong total
+  if(!raw.length) return toast("⚠️ Isi minimal satu item");
+  if(raw.some(x=>!x.nama||x.jumlah<=0)) return toast("⚠️ Nama dan jumlah setiap item wajib diisi");
+  const b=$("btn"); b.disabled=true; b.innerHTML='<span class="spinner-border spinner-border-sm me-2"></span>Menyimpan...';
+  try{
+    const j=await call("keu_add",{tanggal,transaksi:tipe,items:raw});
+    if(!j.ok) throw new Error(j.error);
+    toast(`✅ ${j.saved} item ${tipe.toLowerCase()} tersimpan`);
+    resetForm(); loadData();
+  }catch(e){ if($("app").hidden===false) toast("❌ Gagal simpan: "+e.message); }
+  b.disabled=false; b.innerHTML='<i class="bi bi-save-fill me-1"></i> Simpan Transaksi';
+});
+
+/* ---------- Dashboard ---------- */
+const PAL_IN=["#16a34a","#22c55e","#0f766e","#34d399","#65a30d","#2dd4bf","#84cc16","#059669"];
+const PAL_OUT=["#e11d48","#fb7185","#f97316","#fbbf24","#be123c","#f43f5e","#ea580c","#9f1239"];
+const bln = ym => new Date(ym+"-01T00:00:00").toLocaleDateString("id-ID",{month:"short",year:"numeric"});
+const blnL = ym => new Date(ym+"-01T00:00:00").toLocaleDateString("id-ID",{month:"long",year:"numeric"});
+const sum = a => a.reduce((x,y)=>x+y.jumlah,0);
+
+async function loadData(){
+  try{
+    const j=await call("keu_list"); if(!j.ok) throw new Error(j.error);
+    ALL=j.data; renderMonthSelect(); render();
+  }catch(e){ if($("app").hidden===false) toast("Gagal memuat data: "+e.message); }
+}
+function renderMonthSelect(){
+  const cur=$("bulan").value||"all";
+  const ms=[...new Set(ALL.map(x=>x.tanggal.slice(0,7)))].sort().reverse();
+  $("bulan").innerHTML='<option value="all">Semua bulan</option>'+ms.map(m=>`<option value="${m}">${blnL(m)}</option>`).join("");
+  $("bulan").value = ms.includes(cur)||cur==="all" ? cur : "all";
+}
+function filtered(){const m=$("bulan").value;return m==="all"?ALL:ALL.filter(x=>x.tanggal.startsWith(m))}
+
+function groupByNama(rows){
+  const m=new Map();
+  rows.forEach(r=>{const k=r.nama.trim().toLowerCase();const o=m.get(k)||{label:r.nama.trim(),v:0};o.v+=r.jumlah;m.set(k,o)});
+  return [...m.values()].sort((a,b)=>b.v-a.v);
+}
+function donut(canvas, rows, pal, old){
+  old&&old.destroy();
+  const g=groupByNama(rows);
+  if(!g.length){const c=canvas.getContext("2d");c.clearRect(0,0,canvas.width,canvas.height);return null}
+  return new Chart(canvas,{type:"doughnut",
+    data:{labels:g.map(x=>x.label),datasets:[{data:g.map(x=>x.v),backgroundColor:g.map((_,i)=>pal[i%pal.length]),borderWidth:4,borderColor:"#fff"}]},
+    options:{maintainAspectRatio:false,cutout:"60%",
+      plugins:{legend:{position:"bottom",labels:{usePointStyle:true,font:{weight:"700"}}},
+        tooltip:{callbacks:{label:c=>` ${c.label}: ${rp(c.parsed)}`}}}}});
+}
+
+function render(){
+  const rows=filtered(), masuk=rows.filter(x=>x.transaksi==="Pemasukan"), keluar=rows.filter(x=>x.transaksi==="Pengeluaran");
+  const tin=sum(masuk), tout=sum(keluar);
+  $("sIn").textContent=rp(tin); $("sOut").textContent=rp(tout); $("sSaldo").textContent=rp(tin-tout);
+
+  try{ renderCharts(masuk,keluar) }catch(e){ console.error("Grafik gagal dimuat:",e) }
+  shown=15; renderList();
+}
+
+function renderCharts(masuk,keluar){
+  // per bulan (selalu seluruh data)
+  const ms=[...new Set(ALL.map(x=>x.tanggal.slice(0,7)))].sort();
+  cBulan&&cBulan.destroy();
+  cBulan=new Chart($("cBulan"),{type:"bar",
+    data:{labels:ms.map(bln),datasets:[
+      {label:"Pemasukan",backgroundColor:"#22c55e",borderRadius:6,data:ms.map(m=>sum(ALL.filter(x=>x.tanggal.startsWith(m)&&x.transaksi==="Pemasukan")))},
+      {label:"Pengeluaran",backgroundColor:"#fb7185",borderRadius:6,data:ms.map(m=>sum(ALL.filter(x=>x.tanggal.startsWith(m)&&x.transaksi==="Pengeluaran")))}]},
+    options:{maintainAspectRatio:false,
+      scales:{y:{beginAtZero:true,ticks:{callback:v=>v>=1e6?(v/1e6)+" jt":v>=1e3?(v/1e3)+" rb":v}},x:{grid:{display:false}}},
+      plugins:{legend:{position:"bottom",labels:{usePointStyle:true,font:{weight:"700"}}},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${rp(c.parsed.y)}`}}}}});
+
+  cIn=donut($("cIn"),masuk,PAL_IN,cIn);
+  cOut=donut($("cOut"),keluar,PAL_OUT,cOut);
+}
+
+function renderList(){
+  const rows=filtered().map((x,i)=>({...x,i})).filter(x=>tabF==="all"||x.transaksi===tabF)
+    .sort((a,b)=>b.tanggal.localeCompare(a.tanggal)||b.i-a.i);
+  const box=$("riwayat");
+  if(!rows.length){box.innerHTML='<div class="empty">Belum ada transaksi</div>';$("more").hidden=true;return}
+  box.innerHTML=rows.slice(0,shown).map(x=>{
+    const m=x.transaksi==="Pemasukan";
+    const dt=new Date(x.tanggal+"T00:00:00").toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"});
+    return `<div class="trx"><div class="ic ${m?"in":"out"}"><i class="bi bi-arrow-${m?"down":"up"}-circle-fill"></i></div>
+      <div><div class="nm">${esc(x.nama)}</div><div class="dt">${dt} · ${x.transaksi}</div></div>
+      <div class="am ${m?"in":"out"}">${m?"+":"-"}${rp(x.jumlah)}</div></div>`}).join("");
+  $("more").hidden = rows.length<=shown;
+}
+$("tabs").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  tabF=b.dataset.f; document.querySelectorAll("#tabs button").forEach(x=>x.classList.toggle("on",x===b));
+  shown=15; renderList();
+});
+$("more").onclick=()=>{shown+=15;renderList()};
+$("bulan").onchange=render;
+$("ref").onclick=loadData;
+
+/* ---------- Mulai ---------- */
+if(sessionStorage.getItem(TK)) showApp();
+</script>
+</body>
+</html>
