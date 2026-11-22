@@ -85,6 +85,21 @@ cursor:pointer;transition:.2s;background:#f6fbfa;display:block}
 .mini-title{font-weight:800;font-size:.95rem;display:flex;align-items:center;gap:.4rem;margin-bottom:.6rem}
 .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
 
+/* tabel keuangan */
+.tbl-wrap{overflow:auto;max-height:440px;border:2px solid #dbe9e7;border-radius:16px;-webkit-overflow-scrolling:touch}
+.tbl{width:100%;min-width:680px;border-collapse:separate;border-spacing:0;font-size:.8rem}
+.tbl th{position:sticky;top:0;z-index:1;background:var(--teal);color:#fff;font-weight:700;padding:.6rem .6rem;text-align:left;white-space:nowrap;font-size:.74rem}
+.tbl th.r,.tbl td.r{text-align:right}
+.tbl td{padding:.5rem .6rem;border-bottom:1px solid #e5eeed;vertical-align:top}
+.tbl tbody tr:nth-child(even) td{background:#f6fbfa}
+.tbl td.dt{white-space:nowrap;color:#475569;font-weight:600}
+.tbl td.in{color:var(--in);font-weight:700}.tbl td.out{color:var(--out);font-weight:700}
+.tbl td.num{white-space:nowrap;font-variant-numeric:tabular-nums}
+.tbl td.sal{font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tbl td.sal.neg{color:var(--out)}
+.tbl tfoot td{position:sticky;bottom:0;background:#e6f4f1;font-weight:800;border-top:2px solid var(--teal);border-bottom:0;white-space:nowrap}
+.tbl .nm{word-break:break-word;min-width:120px}
+
 /* riwayat */
 .tabs{display:flex;gap:.4rem;margin-bottom:.8rem;flex-wrap:wrap}
 .tabs button{border:2px solid #dbe9e7;background:#f6fbfa;border-radius:50px;padding:.3rem .9rem;font-weight:700;font-size:.8rem;color:#475569}
@@ -196,7 +211,20 @@ footer{text-align:center;font-size:.75rem;color:#64748b;padding:.5rem 0 1.5rem}
       <div class="chart-box mb-4"><canvas id="cIn"></canvas></div>
 
       <div class="mini-title"><span class="dot" style="background:var(--out)"></span> Pengeluaran per item</div>
-      <div class="chart-box"><canvas id="cOut"></canvas></div>
+      <div class="chart-box mb-4"><canvas id="cOut"></canvas></div>
+
+      <div class="mini-title"><i class="bi bi-table" style="color:var(--teal)"></i> Tabel Keuangan</div>
+      <div class="tbl-wrap">
+        <table class="tbl" id="tbl">
+          <thead><tr>
+            <th>Tanggal Input</th><th>Transaksi Pemasukan</th><th class="r">Jumlah Pemasukan</th>
+            <th>Transaksi Pengeluaran</th><th class="r">Jumlah Pengeluaran</th><th class="r">Saldo</th>
+          </tr></thead>
+          <tbody id="tblBody"></tbody>
+          <tfoot id="tblFoot"></tfoot>
+        </table>
+      </div>
+      <div class="small text-secondary mt-2">Saldo dihitung berurutan sesuai Spreadsheet: pemasukan menambah, pengeluaran mengurangi.</div>
     </section>
 
     <!-- RIWAYAT -->
@@ -363,7 +391,31 @@ function render(){
   $("sIn").textContent=rp(tin); $("sOut").textContent=rp(tout); $("sSaldo").textContent=rp(tin-tout);
 
   try{ renderCharts(masuk,keluar) }catch(e){ console.error("Grafik gagal dimuat:",e) }
+  try{ renderTable() }catch(e){ console.error("Tabel gagal dimuat:",e) }
   shown=15; renderList();
+}
+
+/* Tabel keuangan: saldo berjalan dihitung dari SELURUH data (urutan sama dengan Spreadsheet),
+   lalu baris ditampilkan sesuai filter bulan. */
+function renderTable(){
+  let saldo=0;
+  const all=ALL.map(x=>{saldo+= x.transaksi==="Pemasukan"?x.jumlah:-x.jumlah; return {...x,saldo}});
+  const m=$("bulan").value;
+  const rows = m==="all" ? all : all.filter(x=>x.tanggal.startsWith(m));
+  const body=$("tblBody"), foot=$("tblFoot");
+  if(!rows.length){
+    body.innerHTML='<tr><td colspan="6" class="empty">Belum ada transaksi</td></tr>'; foot.innerHTML=""; return;
+  }
+  const fd=t=>new Date(t+"T00:00:00").toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"});
+  const sal=v=>`<td class="r sal${v<0?" neg":""}">${rp(v)}</td>`;
+  body.innerHTML=rows.map(x=>{
+    const masuk=x.transaksi==="Pemasukan";
+    return `<tr><td class="dt">${fd(x.tanggal)}</td>`+
+      (masuk?`<td class="nm in">${esc(x.nama)}</td><td class="r num in">${rp(x.jumlah)}</td><td></td><td></td>`
+            :`<td></td><td></td><td class="nm out">${esc(x.nama)}</td><td class="r num out">${rp(x.jumlah)}</td>`)+
+      sal(x.saldo)+`</tr>`}).join("");
+  const tin=sum(rows.filter(x=>x.transaksi==="Pemasukan")), tout=sum(rows.filter(x=>x.transaksi==="Pengeluaran"));
+  foot.innerHTML=`<tr><td>Total</td><td></td><td class="r">${rp(tin)}</td><td></td><td class="r">${rp(tout)}</td>${sal(rows[rows.length-1].saldo)}</tr>`;
 }
 
 function renderCharts(masuk,keluar){
@@ -409,3 +461,5 @@ if(sessionStorage.getItem(TK)) showApp();
 </script>
 </body>
 </html>
+
+
